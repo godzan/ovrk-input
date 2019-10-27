@@ -23,7 +23,7 @@
 #include <memory>
 #include "logging.h"
 
-#include "tabcontrollers/WalkInPlaceTabController.h"
+#include "tabcontrollers/KeyboardInputTabController.h"
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 static const std::string slash="\\";
@@ -32,15 +32,15 @@ static const std::string slash="/";
 #endif
 
 // application namespace
-namespace walkinplace {
+namespace keyboardinput {
 
 class OverlayController : public QObject {
 	Q_OBJECT
 	Q_PROPERTY(bool desktopMode READ isDesktopMode)
 
 public:
-	static constexpr const char* applicationKey = "pottedmeat7.VRWalkInPlace";
-	static constexpr const char* applicationName = "OpenVR-WalkInPlace";
+	static constexpr const char* applicationKey = "pottedmeat7.VRKeyboardInput";
+	static constexpr const char* applicationName = "OpenVR-KeyboardInput";
 	static constexpr const char* applicationVersionString = "v4.2";
 
 private:
@@ -66,7 +66,7 @@ private:
 	QUrl m_runtimePathUrl;
 
 public: // I know it's an ugly hack to make them public to enable external access, but I am too lazy to implement getters.
-	WalkInPlaceTabController walkInPlaceTabController;
+	KeyboardInputTabController keyboardInputTabController;
 
 private:
     OverlayController(bool desktopMode, bool directMode) : QObject(), desktopMode(desktopMode), directMode(directMode) {}
@@ -114,7 +114,7 @@ public:
 	}
 
 	static OverlayController* createInstance(bool desktopMode, bool directMode) {
-		singleton.reset(new walkinplace::OverlayController(desktopMode, directMode));
+		singleton.reset(new keyboardinput::OverlayController(desktopMode, directMode));
 		return singleton.get();
 	}
 
@@ -123,4 +123,4 @@ public:
 	static void setAppSettings(QSettings* settings) { _appSettings = settings; }
 };
 
-} // namespace walkinplace
+} // namespace keyboardinput

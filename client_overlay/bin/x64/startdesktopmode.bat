@@ -1,1 +1,1 @@
-start OpenVR-WalkInPlaceOverlay.exe -desktop
+start OpenVR-KeyboardInputOverlay.exe -desktop

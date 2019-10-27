@@ -1,0 +1,74 @@
+{
+   "bindings" : {
+      "/actions/legacy" : {
+         "sources" : [
+            {
+               "inputs" : {
+                  "pull" : {
+                     "output" : "/actions/legacy/in/left_axis1_value"
+                  },
+                  "touch" : {
+                     "output" : "/actions/legacy/in/left_axis1_touch"
+                  }
+               },
+               "mode" : "trigger",
+               "path" : "/user/treadmill/input/trigger"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/legacy/in/left_axis1_press"
+                  }
+               },
+               "mode" : "button",
+               "parameters" : {
+                  "haptic_amplitude" : "0"
+               },
+               "path" : "/user/treadmill/input/trigger"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/legacy/in/left_grip_press"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/treadmill/input/grip"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/legacy/in/left_axis0_press"
+                  },
+                  "position" : {
+                     "output" : "/actions/legacy/in/left_axis0_value"
+                  },
+                  "touch" : {
+                     "output" : "/actions/legacy/in/left_axis0_touch"
+                  }
+               },
+               "mode" : "trackpad",
+               "path" : "/user/treadmill/input/trackpad"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/legacy/in/left_axis0_press"
+                  },
+                  "position" : {
+                     "output" : "/actions/legacy/in/left_axis0_value"
+                  },
+                  "touch" : {
+                     "output" : "/actions/legacy/in/left_axis0_touch"
+                  }
+               },
+               "mode" : "joystick",
+               "path" : "/user/treadmill/input/joystick"
+            }
+         ]
+      }
+   },
+   "controller_type" : "ovrki_controller",
+   "description" : "",
+   "name" : "Default bindings for OVRKI"
+}

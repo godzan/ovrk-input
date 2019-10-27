@@ -24,7 +24,7 @@
 
 
 // application namespace
-namespace walkinplace {
+namespace keyboardinput {
 
 std::unique_ptr<OverlayController> OverlayController::singleton;
 
@@ -40,7 +40,7 @@ void OverlayController::Init(QQmlEngine* qmlEngine) {
 	vr::VR_Init(&initError, vr::VRApplication_Overlay);
 	if (initError != vr::VRInitError_None) {
 		if (initError == vr::VRInitError_Init_HmdNotFound || initError == vr::VRInitError_Init_HmdNotFoundPresenceFailed) {
-			QMessageBox::critical(nullptr, "OpenVR WalkInPlace Overlay", "Could not find HMD!");
+			QMessageBox::critical(nullptr, "OpenVR KeyboardInput Overlay", "Could not find HMD!");
 		}
 		throw std::runtime_error(std::string("Failed to initialize OpenVR: ") + std::string(vr::VR_GetVRInitErrorAsEnglishDescription(initError)));
 	}
@@ -53,28 +53,28 @@ void OverlayController::Init(QQmlEngine* qmlEngine) {
 
 	// Check whether OpenVR is too outdated
 	if (!vr::VR_IsInterfaceVersionValid(vr::IVRSystem_Version)) {
-		QMessageBox::critical(nullptr, "OpenVR WalkInPlace Overlay", "OpenVR version is too outdated. Please update OpenVR.");
+		QMessageBox::critical(nullptr, "OpenVR KeyboardInput Overlay", "OpenVR version is too outdated. Please update OpenVR.");
 		throw std::runtime_error(std::string("OpenVR version is too outdated: Interface version ") + std::string(vr::IVRSystem_Version) + std::string(" not found."));
 	} else if (!vr::VR_IsInterfaceVersionValid(vr::IVRSettings_Version)) {
-		QMessageBox::critical(nullptr, "OpenVR WalkInPlace Overlay", "OpenVR version is too outdated. Please update OpenVR.");
+		QMessageBox::critical(nullptr, "OpenVR KeyboardInput Overlay", "OpenVR version is too outdated. Please update OpenVR.");
 		throw std::runtime_error(std::string("OpenVR version is too outdated: Interface version ") + std::string(vr::IVRSettings_Version) + std::string(" not found."));
 	} else if (!vr::VR_IsInterfaceVersionValid(vr::IVROverlay_Version)) {
-		QMessageBox::critical(nullptr, "OpenVR WalkInPlace Overlay", "OpenVR version is too outdated. Please update OpenVR.");
+		QMessageBox::critical(nullptr, "OpenVR KeyboardInput Overlay", "OpenVR version is too outdated. Please update OpenVR.");
 		throw std::runtime_error(std::string("OpenVR version is too outdated: Interface version ") + std::string(vr::IVROverlay_Version) + std::string(" not found."));
 	} else if (!vr::VR_IsInterfaceVersionValid(vr::IVRApplications_Version)) {
-		QMessageBox::critical(nullptr, "OpenVR WalkInPlace Overlay", "OpenVR version is too outdated. Please update OpenVR.");
+		QMessageBox::critical(nullptr, "OpenVR KeyboardInput Overlay", "OpenVR version is too outdated. Please update OpenVR.");
 		throw std::runtime_error(std::string("OpenVR version is too outdated: Interface version ") + std::string(vr::IVRApplications_Version) + std::string(" not found."));
 	} else if (!vr::VR_IsInterfaceVersionValid(vr::IVRChaperone_Version)) {
-		QMessageBox::critical(nullptr, "OpenVR WalkInPlace Overlay", "OpenVR version is too outdated. Please update OpenVR.");
+		QMessageBox::critical(nullptr, "OpenVR KeyboardInput Overlay", "OpenVR version is too outdated. Please update OpenVR.");
 		throw std::runtime_error(std::string("OpenVR version is too outdated: Interface version ") + std::string(vr::IVRChaperone_Version) + std::string(" not found."));
 	} else if (!vr::VR_IsInterfaceVersionValid(vr::IVRChaperoneSetup_Version)) {
-		QMessageBox::critical(nullptr, "OpenVR WalkInPlace Overlay", "OpenVR version is too outdated. Please update OpenVR.");
+		QMessageBox::critical(nullptr, "OpenVR KeyboardInput Overlay", "OpenVR version is too outdated. Please update OpenVR.");
 		throw std::runtime_error(std::string("OpenVR version is too outdated: Interface version ") + std::string(vr::IVRChaperoneSetup_Version) + std::string(" not found."));
 	} else if (!vr::VR_IsInterfaceVersionValid(vr::IVRCompositor_Version)) {
-		QMessageBox::critical(nullptr, "OpenVR WalkInPlace Overlay", "OpenVR version is too outdated. Please update OpenVR.");
+		QMessageBox::critical(nullptr, "OpenVR KeyboardInput Overlay", "OpenVR version is too outdated. Please update OpenVR.");
 		throw std::runtime_error(std::string("OpenVR version is too outdated: Interface version ") + std::string(vr::IVRCompositor_Version) + std::string(" not found."));
 	} else if (!vr::VR_IsInterfaceVersionValid(vr::IVRNotifications_Version)) {
-		QMessageBox::critical(nullptr, "OpenVR WalkInPlace Overlay", "OpenVR version is too outdated. Please update OpenVR.");
+		QMessageBox::critical(nullptr, "OpenVR KeyboardInput Overlay", "OpenVR version is too outdated. Please update OpenVR.");
 		throw std::runtime_error(std::string("OpenVR version is too outdated: Interface version ") + std::string(vr::IVRNotifications_Version) + std::string(" not found."));
 	}
 
@@ -102,25 +102,25 @@ void OverlayController::Init(QQmlEngine* qmlEngine) {
 	m_pOpenGLContext->makeCurrent(m_pOffscreenSurface.get());
 
 	if (!vr::VROverlay()) {
-		QMessageBox::critical(nullptr, "OpenVR WalkInPlace Overlay", "Is OpenVR running?");
+		QMessageBox::critical(nullptr, "OpenVR KeyboardInput Overlay", "Is OpenVR running?");
 		throw std::runtime_error(std::string("No Overlay interface"));
 	}
 
 	// Init controllers
-	walkInPlaceTabController.initStage1();
+	keyboardInputTabController.initStage1();
 
 	// Set qml context
 	qmlEngine->rootContext()->setContextProperty("applicationVersion", getVersionString());
 	qmlEngine->rootContext()->setContextProperty("vrRuntimePath", getVRRuntimePathUrl());
 
 	// Register qml singletons
-	qmlRegisterSingletonType<OverlayController>("pottedmeat7.walkinplace", 1, 0, "OverlayController", [](QQmlEngine*, QJSEngine*) {
+	qmlRegisterSingletonType<OverlayController>("pottedmeat7.keyboardinput", 1, 0, "OverlayController", [](QQmlEngine*, QJSEngine*) {
 		QObject* obj = getInstance();
 		QQmlEngine::setObjectOwnership(obj, QQmlEngine::CppOwnership);
 		return obj;
 	});
-	qmlRegisterSingletonType<WalkInPlaceTabController>("pottedmeat7.walkinplace", 1, 0, "WalkInPlaceTabController", [](QQmlEngine*, QJSEngine*) {
-		QObject* obj = &getInstance()->walkInPlaceTabController;
+	qmlRegisterSingletonType<KeyboardInputTabController>("pottedmeat7.keyboardinput", 1, 0, "KeyboardInputTabController", [](QQmlEngine*, QJSEngine*) {
+		QObject* obj = &getInstance()->keyboardInputTabController;
 		QQmlEngine::setObjectOwnership(obj, QQmlEngine::CppOwnership);
 		return obj;
 	});
@@ -152,7 +152,7 @@ void OverlayController::SetWidget(QQuickItem* quickItem, const std::string& name
 		vr::VROverlayError overlayError = vr::VROverlay()->CreateDashboardOverlay(key.c_str(), name.c_str(), &m_ulOverlayHandle, &m_ulOverlayThumbnailHandle);
 		if (overlayError != vr::VROverlayError_None) {
 			if (overlayError == vr::VROverlayError_KeyInUse) {
-				QMessageBox::critical(nullptr, "OpenVR WalkInPlace Overlay", "Another instance is already running.");
+				QMessageBox::critical(nullptr, "OpenVR KeyboardInput Overlay", "Another instance is already running.");
 			}
 			throw std::runtime_error(std::string("Failed to create Overlay: " + std::string(vr::VROverlay()->GetOverlayErrorNameFromEnum(overlayError))));
 		}
@@ -202,7 +202,7 @@ void OverlayController::SetWidget(QQuickItem* quickItem, const std::string& name
 	m_pPumpEventsTimer->setInterval(20);
 	m_pPumpEventsTimer->start();
 
-	walkInPlaceTabController.initStage2(this, m_pWindow.get());
+	keyboardInputTabController.initStage2(this, m_pWindow.get());
 }
 
 
@@ -331,12 +331,12 @@ void OverlayController::OnTimeoutPumpEvents() {
 			break;
 
 			default:
-				walkInPlaceTabController.handleEvent(vrEvent);
+				keyboardInputTabController.handleEvent(vrEvent);
 				break;
 		}
 	}
 
-	walkInPlaceTabController.eventLoopTick();
+	keyboardInputTabController.eventLoopTick();
 
 	if (m_ulOverlayThumbnailHandle != vr::k_ulOverlayHandleInvalid) {
 		while (vr::VROverlay()->PollNextOverlayEvent(m_ulOverlayThumbnailHandle, &vrEvent, sizeof(vrEvent))) {
@@ -376,8 +376,8 @@ const vr::VROverlayHandle_t& OverlayController::overlayThumbnailHandle() {
 
 
 void OverlayController::showKeyboard(QString existingText, unsigned long userValue) {
-	vr::VROverlay()->ShowKeyboardForOverlay(m_ulOverlayHandle, vr::k_EGamepadTextInputModeNormal, vr::k_EGamepadTextInputLineModeSingleLine, "Walk In Place Overlay", 1024, existingText.toStdString().c_str(), false, userValue);
+	vr::VROverlay()->ShowKeyboardForOverlay(m_ulOverlayHandle, vr::k_EGamepadTextInputModeNormal, vr::k_EGamepadTextInputLineModeSingleLine, "Keyboard Input Overlay", 1024, existingText.toStdString().c_str(), false, userValue);
 }
 
 
-} // namespace walkinplace
+} // namespace keyboardinput

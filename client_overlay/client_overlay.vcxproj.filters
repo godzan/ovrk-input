@@ -2,16 +2,16 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Debug\moc_overlaycontroller.cpp" />
-    <ClCompile Include="Debug\moc_WalkInPlaceTabController.cpp" />
+    <ClCompile Include="Debug\moc_KeyboardInputTabController.cpp" />
     <ClCompile Include="Release\moc_overlaycontroller.cpp" />
-    <ClCompile Include="Release\moc_WalkInPlaceTabController.cpp" />
+    <ClCompile Include="Release\moc_KeyboardInputTabController.cpp" />
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\overlaycontroller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\tabcontrollers\WalkInPlaceTabController.cpp">
+    <ClCompile Include="src\tabcontrollers\KeyboardInputTabController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -24,7 +24,7 @@
     <CustomBuild Include="src\overlaycontroller.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="src\tabcontrollers\WalkInPlaceTabController.h">
+    <CustomBuild Include="src\tabcontrollers\KeyboardInputTabController.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>

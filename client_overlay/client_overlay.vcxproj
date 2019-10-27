@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{33E075DB-922D-3252-976E-46B5721DC3DE}</ProjectGuid>
-    <RootNamespace>OpenVR-WalkInPlace</RootNamespace>
+    <RootNamespace>OpenVR-KeyboardInput</RootNamespace>
     <Keyword>Qt4VSv1.0</Keyword>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -32,7 +32,7 @@
     <CharacterSet>NotSet</CharacterSet>
     <ConfigurationType>Application</ConfigurationType>
     <IntermediateDirectory>release\</IntermediateDirectory>
-    <PrimaryOutput>OpenVR-WalkInPlace</PrimaryOutput>
+    <PrimaryOutput>OpenVR-KeyboardInput</PrimaryOutput>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <PlatformToolSet>v141</PlatformToolSet>
@@ -41,7 +41,7 @@
     <CharacterSet>NotSet</CharacterSet>
     <ConfigurationType>Application</ConfigurationType>
     <IntermediateDirectory>release\</IntermediateDirectory>
-    <PrimaryOutput>OpenVR-WalkInPlace</PrimaryOutput>
+    <PrimaryOutput>OpenVR-KeyboardInput</PrimaryOutput>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <PlatformToolSet>v141</PlatformToolSet>
@@ -50,7 +50,7 @@
     <CharacterSet>NotSet</CharacterSet>
     <ConfigurationType>Application</ConfigurationType>
     <IntermediateDirectory>debug\</IntermediateDirectory>
-    <PrimaryOutput>OpenVR-WalkInPlace</PrimaryOutput>
+    <PrimaryOutput>OpenVR-KeyboardInput</PrimaryOutput>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <PlatformToolSet>v141</PlatformToolSet>
@@ -59,7 +59,7 @@
     <CharacterSet>NotSet</CharacterSet>
     <ConfigurationType>Application</ConfigurationType>
     <IntermediateDirectory>debug\</IntermediateDirectory>
-    <PrimaryOutput>OpenVR-WalkInPlace</PrimaryOutput>
+    <PrimaryOutput>OpenVR-KeyboardInput</PrimaryOutput>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings" />
@@ -80,8 +80,8 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">bin\x64\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Platform)\$(Configuration)\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">OpenVR-WalkInPlaceOverlay</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">OpenVR-WalkInPlaceOverlay</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">OpenVR-KeyboardInputOverlay</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">OpenVR-KeyboardInputOverlay</TargetName>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</IgnoreImportLibrary>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
@@ -89,8 +89,8 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">bin\x64\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Platform)\$(Configuration)\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">OpenVR-WalkInPlace</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">OpenVR-WalkInPlace</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">OpenVR-KeyboardInput</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">OpenVR-KeyboardInput</TargetName>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</IgnoreImportLibrary>
   </PropertyGroup>
@@ -106,7 +106,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\mlpack\armadillo-9.200.7\include;C:\mlpack\mlpack-3.0.4\include;.\..\lib_vrwalkinplace\include;.\..\third-party\boost_1_65_1;.\..\openvr\headers;.\..\third-party\easylogging++;$(QTDIR)\include;$(QTDIR)\include\QtQuick;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtQml;$(QTDIR)\include\QtNetwork;$(QTDIR)\include\QtCore;.\release;$(QTDIR)\mkspecs\win32-msvc2015;$(ConfigurationName);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\mlpack\armadillo-9.200.7\include;C:\mlpack\mlpack-3.0.4\include;.\..\lib_vrkeyboardinput\include;.\..\third-party\boost_1_65_1;.\..\openvr\headers;.\..\third-party\easylogging++;$(QTDIR)\include;$(QTDIR)\include\QtQuick;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtQml;$(QTDIR)\include\QtNetwork;$(QTDIR)\include\QtCore;.\release;$(QTDIR)\mkspecs\win32-msvc2015;$(ConfigurationName);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:strictStrings -Zc:throwingNew -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>release\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -132,7 +132,7 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
       <LinkIncremental>false</LinkIncremental>
-      <OutputFile>$(OutDir)\OpenVR-WalkInPlaceOverlay.exe</OutputFile>
+      <OutputFile>$(OutDir)\OpenVR-KeyboardInputOverlay.exe</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -152,7 +152,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.\..\lib_vrwalkinplace\include;.\..\third-party\boost_1_65_1;.\..\openvr\headers;.\..\third-party\easylogging++;$(QTDIR)\include;$(QTDIR)\include\QtQuick;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtQml;$(QTDIR)\include\QtNetwork;$(QTDIR)\include\QtCore;.\release;$(QTDIR)\mkspecs\win32-msvc2015;$(ConfigurationName);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\..\lib_vrkeyboardinput\include;.\..\third-party\boost_1_65_1;.\..\openvr\headers;.\..\third-party\easylogging++;$(QTDIR)\include;$(QTDIR)\include\QtQuick;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtQml;$(QTDIR)\include\QtNetwork;$(QTDIR)\include\QtCore;.\release;$(QTDIR)\mkspecs\win32-msvc2015;$(ConfigurationName);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:strictStrings -Zc:throwingNew -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>release\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -178,7 +178,7 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
       <LinkIncremental>false</LinkIncremental>
-      <OutputFile>$(OutDir)\OpenVR-WalkInPlaceOverlay.exe</OutputFile>
+      <OutputFile>$(OutDir)\OpenVR-KeyboardInputOverlay.exe</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -195,7 +195,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.\..\lib_vrwalkinplace\include;.\..\third-party\boost_1_65_1;.\..\openvr\headers;.\..\third-party\easylogging++;$(QTDIR)\include;$(QTDIR)\include\QtQuick;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtQml;$(QTDIR)\include\QtNetwork;$(QTDIR)\include\QtCore;.\debug;$(QTDIR)\mkspecs\win32-msvc2015;$(ConfigurationName);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\..\lib_vrkeyboardinput\include;.\..\third-party\boost_1_65_1;.\..\openvr\headers;.\..\third-party\easylogging++;$(QTDIR)\include;$(QTDIR)\include\QtQuick;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtQml;$(QTDIR)\include\QtNetwork;$(QTDIR)\include\QtCore;.\debug;$(QTDIR)\mkspecs\win32-msvc2015;$(ConfigurationName);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:strictStrings -Zc:throwingNew -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>debug\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -220,7 +220,7 @@
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
-      <OutputFile>$(OutDir)\OpenVR-WalkInPlaceOverlay.exe</OutputFile>
+      <OutputFile>$(OutDir)\OpenVR-KeyboardInputOverlay.exe</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -236,7 +236,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.\..\lib_vrwalkinplace\include;.\..\third-party\boost_1_65_1;.\..\openvr\headers;.\..\third-party\easylogging++;$(QTDIR)\include;$(QTDIR)\include\QtQuick;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtQml;$(QTDIR)\include\QtNetwork;$(QTDIR)\include\QtCore;.\debug;$(QTDIR)\mkspecs\win32-msvc2015;$(ConfigurationName);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\..\lib_vrkeyboardinput\include;.\..\third-party\boost_1_65_1;.\..\openvr\headers;.\..\third-party\easylogging++;$(QTDIR)\include;$(QTDIR)\include\QtQuick;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtQml;$(QTDIR)\include\QtNetwork;$(QTDIR)\include\QtCore;.\debug;$(QTDIR)\mkspecs\win32-msvc2015;$(ConfigurationName);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:strictStrings -Zc:throwingNew -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>debug\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -261,7 +261,7 @@
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
-      <OutputFile>$(OutDir)\OpenVR-WalkInPlaceOverlay.exe</OutputFile>
+      <OutputFile>$(OutDir)\OpenVR-KeyboardInputOverlay.exe</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -281,7 +281,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="Debug\moc_WalkInPlaceTabController.cpp">
+    <ClCompile Include="Debug\moc_KeyboardInputTabController.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -289,24 +289,24 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="Release\moc_WalkInPlaceTabController.cpp">
+    <ClCompile Include="Release\moc_KeyboardInputTabController.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="src\tabcontrollers\WalkInPlaceTabController.cpp" />
+    <ClCompile Include="src\tabcontrollers\KeyboardInputTabController.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\overlaycontroller.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="src\tabcontrollers\WalkInPlaceTabController.h">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -DHAS_OPENBLAS -D%(PreprocessorDefinitions)  "-IC:\mlpack\armadillo-9.200.7\include" "-IC:\mlpack\mlpack-3.0.4\include" "-I.\..\lib_vrwalkinplace\include" "-I.\..\third-party\boost_1_65_1" "-I.\..\openvr\headers" "-I.\..\third-party\easylogging++" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtQuick" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtQml" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2015" "-I$(ConfigurationName)"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -DHAS_OPENBLAS -D%(PreprocessorDefinitions)  "-I.\..\lib_vrwalkinplace\include" "-I.\..\third-party\boost_1_65_1" "-I.\..\openvr\headers" "-I.\..\third-party\easylogging++" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtQuick" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtQml" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2015" "-I$(ConfigurationName)"</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing WalkInPlaceTabController.h...</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing WalkInPlaceTabController.h...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -DHAS_OPENBLAS -D%(PreprocessorDefinitions)  "-I.\..\lib_vrwalkinplace\include" "-I.\..\third-party\boost_1_65_1" "-I.\..\openvr\headers" "-I.\..\third-party\easylogging++" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtQuick" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtQml" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2015" "-I$(ConfigurationName)"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -DHAS_OPENBLAS -D%(PreprocessorDefinitions)  "-I.\..\lib_vrwalkinplace\include" "-I.\..\third-party\boost_1_65_1" "-I.\..\openvr\headers" "-I.\..\third-party\easylogging++" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtQuick" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtQml" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2015" "-I$(ConfigurationName)"</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing WalkInPlaceTabController.h...</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing WalkInPlaceTabController.h...</Message>
+    <CustomBuild Include="src\tabcontrollers\KeyboardInputTabController.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -DHAS_OPENBLAS -D%(PreprocessorDefinitions)  "-IC:\mlpack\armadillo-9.200.7\include" "-IC:\mlpack\mlpack-3.0.4\include" "-I.\..\lib_vrkeyboardinput\include" "-I.\..\third-party\boost_1_65_1" "-I.\..\openvr\headers" "-I.\..\third-party\easylogging++" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtQuick" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtQml" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2015" "-I$(ConfigurationName)"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -DHAS_OPENBLAS -D%(PreprocessorDefinitions)  "-I.\..\lib_vrkeyboardinput\include" "-I.\..\third-party\boost_1_65_1" "-I.\..\openvr\headers" "-I.\..\third-party\easylogging++" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtQuick" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtQml" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2015" "-I$(ConfigurationName)"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing KeyboardInputTabController.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing KeyboardInputTabController.h...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -DHAS_OPENBLAS -D%(PreprocessorDefinitions)  "-I.\..\lib_vrkeyboardinput\include" "-I.\..\third-party\boost_1_65_1" "-I.\..\openvr\headers" "-I.\..\third-party\easylogging++" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtQuick" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtQml" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2015" "-I$(ConfigurationName)"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -DHAS_OPENBLAS -D%(PreprocessorDefinitions)  "-I.\..\lib_vrkeyboardinput\include" "-I.\..\third-party\boost_1_65_1" "-I.\..\openvr\headers" "-I.\..\third-party\easylogging++" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtQuick" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtQml" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2015" "-I$(ConfigurationName)"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing KeyboardInputTabController.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing KeyboardInputTabController.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
@@ -318,12 +318,12 @@
     </CustomBuild>
     <ClInclude Include="src\logging.h" />
     <CustomBuild Include="src\overlaycontroller.h">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -DHAS_OPENBLAS -D%(PreprocessorDefinitions)  "-IC:\mlpack\armadillo-9.200.7\include" "-IC:\mlpack\mlpack-3.0.4\include" "-I.\..\lib_vrwalkinplace\include" "-I.\..\third-party\boost_1_65_1" "-I.\..\openvr\headers" "-I.\..\third-party\easylogging++" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtQuick" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtQml" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2015" "-I$(ConfigurationName)"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -DHAS_OPENBLAS -D%(PreprocessorDefinitions)  "-I.\..\lib_vrwalkinplace\include" "-I.\..\third-party\boost_1_65_1" "-I.\..\openvr\headers" "-I.\..\third-party\easylogging++" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtQuick" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtQml" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2015" "-I$(ConfigurationName)"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -DHAS_OPENBLAS -D%(PreprocessorDefinitions)  "-IC:\mlpack\armadillo-9.200.7\include" "-IC:\mlpack\mlpack-3.0.4\include" "-I.\..\lib_vrkeyboardinput\include" "-I.\..\third-party\boost_1_65_1" "-I.\..\openvr\headers" "-I.\..\third-party\easylogging++" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtQuick" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtQml" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2015" "-I$(ConfigurationName)"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -DHAS_OPENBLAS -D%(PreprocessorDefinitions)  "-I.\..\lib_vrkeyboardinput\include" "-I.\..\third-party\boost_1_65_1" "-I.\..\openvr\headers" "-I.\..\third-party\easylogging++" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtQuick" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtQml" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2015" "-I$(ConfigurationName)"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing overlaycontroller.h...</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing overlaycontroller.h...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -DHAS_OPENBLAS -D%(PreprocessorDefinitions)  "-I.\..\lib_vrwalkinplace\include" "-I.\..\third-party\boost_1_65_1" "-I.\..\openvr\headers" "-I.\..\third-party\easylogging++" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtQuick" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtQml" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2015" "-I$(ConfigurationName)"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -DHAS_OPENBLAS -D%(PreprocessorDefinitions)  "-I.\..\lib_vrwalkinplace\include" "-I.\..\third-party\boost_1_65_1" "-I.\..\openvr\headers" "-I.\..\third-party\easylogging++" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtQuick" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtQml" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2015" "-I$(ConfigurationName)"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -DHAS_OPENBLAS -D%(PreprocessorDefinitions)  "-I.\..\lib_vrkeyboardinput\include" "-I.\..\third-party\boost_1_65_1" "-I.\..\openvr\headers" "-I.\..\third-party\easylogging++" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtQuick" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtQml" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2015" "-I$(ConfigurationName)"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -DHAS_OPENBLAS -D%(PreprocessorDefinitions)  "-I.\..\lib_vrkeyboardinput\include" "-I.\..\third-party\boost_1_65_1" "-I.\..\openvr\headers" "-I.\..\third-party\easylogging++" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtQuick" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtQml" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2015" "-I$(ConfigurationName)"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing overlaycontroller.h...</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing overlaycontroller.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
@@ -337,7 +337,7 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\lib_vrwalkinplace\lib_vrwalkinplace.vcxproj">
+    <ProjectReference Include="..\lib_vrkeyboardinput\lib_vrkeyboardinput.vcxproj">
       <Project>{05ac9994-2b63-4de5-abf3-95ce346f3a64}</Project>
     </ProjectReference>
   </ItemGroup>

@@ -3,9 +3,9 @@
 
 	!include "MUI2.nsh"
 
-	!define MUI_ICON "..\client_overlay\bin\x64\res\OVRWIP.ico"
+	!define MUI_ICON "..\client_overlay\bin\x64\res\OVRKI.ico"
 	!define MUI_HEADERIMAGE
-	!define MUI_HEADERIMAGE_BITMAP "..\client_overlay\bin\x64\res\OVRWIP.ico"
+	!define MUI_HEADERIMAGE_BITMAP "..\client_overlay\bin\x64\res\OVRKI.ico"
 	!define MUI_HEADERIMAGE_RIGHT
 
 ;--------------------------------
@@ -13,17 +13,17 @@
 
 	!define OPENVR_BASEDIR "..\openvr\"
 	!define OVERLAY_BASEDIR "..\client_overlay\bin\x64"
-	!define DRIVER_BASEDIR "..\driver_vrwalkinplace"
+	!define DRIVER_BASEDIR "..\driver_vrkeyboardinput"
 
 	;Name and file
-	Name "OpenVR Walk In Place"
-	OutFile "OpenVR-WalkInPlace-Installer.exe"
+	Name "OpenVR Keyboard Input"
+	OutFile "OpenVR-KeyboardInput-Installer.exe"
 	
 	;Default installation folder
-	InstallDir "$PROGRAMFILES64\OpenVR-WalkInPlace"
+	InstallDir "$PROGRAMFILES64\OpenVR-KeyboardInput"
 	
 	;Get installation folder from registry if available
-	InstallDirRegKey HKLM "Software\OpenVR-WalkInPlace\Overlay" ""
+	InstallDirRegKey HKLM "Software\OpenVR-KeyboardInput\Overlay" ""
 	
 	;Request application privileges for Windows Vista
 	RequestExecutionLevel admin
@@ -68,7 +68,7 @@ FunctionEnd
 Function .onInit
 	StrCpy $upgradeInstallation "false"
 
-	ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\OpenVRWalkInPlace" "UninstallString"
+	ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\OpenVRKeyboardInput" "UninstallString"
 	StrCmp $R0 "" done	
 	
 	; If SteamVR is already running, display a warning message and exit
@@ -78,9 +78,9 @@ Function .onInit
 			"SteamVR is still running. Cannot install this software.$\nPlease close SteamVR and try again."
 		Abort
  
-	IfFileExists $INSTDIR\OpenVR-WalkInPlaceOverlay.exe 0 +5
+	IfFileExists $INSTDIR\OpenVR-KeyboardInputOverlay.exe 0 +5
 		MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
-			"OpenVR Walk In Place is already installed. $\n$\nClick `OK` to upgrade the \
+			"OpenVR Keyboard Input is already installed. $\n$\nClick `OK` to upgrade the \
 			existing installation or `Cancel` to cancel this upgrade." \
 			IDOK upgrade
 		Abort
@@ -127,35 +127,35 @@ Section "Install" SecInstall
 	ExecWait '"$INSTDIR\vcredist_x64.exe" /install /quiet'
 	
 	Var /GLOBAL vrRuntimePath
-	nsExec::ExecToStack '"$INSTDIR\OpenVR-WalkInPlaceOverlay.exe" -openvrpath'
+	nsExec::ExecToStack '"$INSTDIR\OpenVR-KeyboardInputOverlay.exe" -openvrpath'
 	Pop $0
 	Pop $vrRuntimePath
 	DetailPrint "VR runtime path: $vrRuntimePath"
 
-	SetOutPath "$vrRuntimePath\drivers\00vrwalkinplace"
+	SetOutPath "$vrRuntimePath\drivers\00vrkeyboardinput"
 	File "${DRIVER_BASEDIR}\driver.vrdrivermanifest"
-	SetOutPath "$vrRuntimePath\drivers\00vrwalkinplace\resources"
+	SetOutPath "$vrRuntimePath\drivers\00vrkeyboardinput\resources"
 	File "${DRIVER_BASEDIR}\resources\driver.vrresources"
 	File /r "${DRIVER_BASEDIR}\resources\icons"
 	File /r "${DRIVER_BASEDIR}\resources\input"
 	File /r "${DRIVER_BASEDIR}\resources\settings"
-	SetOutPath "$vrRuntimePath\drivers\00vrwalkinplace\bin\win64"
-	File "${DRIVER_BASEDIR}\bin\x64\driver_00vrwalkinplace.dll"
+	SetOutPath "$vrRuntimePath\drivers\00vrkeyboardinput\bin\win64"
+	File "${DRIVER_BASEDIR}\bin\x64\driver_00vrkeyboardinput.dll"
 
 	; Install the vrmanifest
-	nsExec::ExecToLog '"$INSTDIR\OpenVR-WalkInPlaceOverlay.exe" -installmanifest'
+	nsExec::ExecToLog '"$INSTDIR\OpenVR-KeyboardInputOverlay.exe" -installmanifest'
 	
 	; Post-installation step
-	nsExec::ExecToLog '"$INSTDIR\OpenVR-WalkInPlaceOverlay.exe" -postinstallationstep'
+	nsExec::ExecToLog '"$INSTDIR\OpenVR-KeyboardInputOverlay.exe" -postinstallationstep'
   
 	;Store installation folder
-	WriteRegStr HKLM "Software\OpenVR-WalkInPlace\Overlay" "" $INSTDIR
-	WriteRegStr HKLM "Software\OpenVR-WalkInPlace\Driver" "" $vrRuntimePath
+	WriteRegStr HKLM "Software\OpenVR-KeyboardInput\Overlay" "" $INSTDIR
+	WriteRegStr HKLM "Software\OpenVR-KeyboardInput\Driver" "" $vrRuntimePath
   
 	;Create uninstaller
 	WriteUninstaller "$INSTDIR\Uninstall.exe"
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\OpenVRWalkInPlace" "DisplayName" "OpenVR Walk In Place"
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\OpenVRWalkInPlace" "UninstallString" "$\"$INSTDIR\Uninstall.exe$\""
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\OpenVRKeyboardInput" "DisplayName" "OpenVR Keyboard Input"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\OpenVRKeyboardInput" "UninstallString" "$\"$INSTDIR\Uninstall.exe$\""
 
 SectionEnd
 
@@ -171,35 +171,35 @@ Section "Uninstall"
 		Abort
 
 	; Remove the vrmanifest
-	nsExec::ExecToLog '"$INSTDIR\OpenVR-WalkInPlaceOverlay.exe" -removemanifest'
+	nsExec::ExecToLog '"$INSTDIR\OpenVR-KeyboardInputOverlay.exe" -removemanifest'
 
 	; Delete installed files
 	Var /GLOBAL vrRuntimePath2
-	ReadRegStr $vrRuntimePath2 HKLM "Software\OpenVR-WalkInPlace\Driver" ""
+	ReadRegStr $vrRuntimePath2 HKLM "Software\OpenVR-KeyboardInpute\Driver" ""
 	DetailPrint "VR runtime path: $vrRuntimePath2"
-	Delete "$vrRuntimePath2\drivers\00vrwalkinplace\driver.vrdrivermanifest"
-	Delete "$vrRuntimePath2\drivers\00vrwalkinplace\resources\driver.vrresources"
-	Delete "$vrRuntimePath2\drivers\00vrwalkinplace\resources\settings\default.vrsettings"
-	Delete "$vrRuntimePath2\drivers\00vrwalkinplace\bin\win64\driver_00vrwalkinplace.dll"
-	Delete "$vrRuntimePath2\drivers\00vrwalkinplace\bin\win64\driver_vrwalkinplace.log"
-	Delete "$vrRuntimePath2\drivers\00vrwalkinplace\bin\win64\error.log"
-	Delete "$vrRuntimePath2\drivers\00vrwalkinplace\bin\win64\OpenVR-WalkInPlaceOverlay.log"
-	Delete "$vrRuntimePath2\drivers\00vrwalkinplace\resources\icons\ovrwip_wand.svg"
-	Delete "$vrRuntimePath2\drivers\00vrwalkinplace\resources\input\ovrwip_controller_profile.json"
-	Delete "$vrRuntimePath2\drivers\00vrwalkinplace\resources\input\legacy_bindings_ovrwip_controller.json"
-	RMdir "$vrRuntimePath2\drivers\00vrwalkinplace\resources\input"
-	RMdir "$vrRuntimePath2\drivers\00vrwalkinplace\resources\icons"
-	RMdir "$vrRuntimePath2\drivers\00vrwalkinplace\resources\settings"
-	RMdir "$vrRuntimePath2\drivers\00vrwalkinplace\resources\"
-	RMdir "$vrRuntimePath2\drivers\00vrwalkinplace\bin\win64\"
-	RMdir "$vrRuntimePath2\drivers\00vrwalkinplace\bin\"
-	RMdir "$vrRuntimePath2\drivers\00vrwalkinplace\"
+	Delete "$vrRuntimePath2\drivers\00vrkeyboardinput\driver.vrdrivermanifest"
+	Delete "$vrRuntimePath2\drivers\00vrkeyboardinput\resources\driver.vrresources"
+	Delete "$vrRuntimePath2\drivers\00vrkeyboardinput\resources\settings\default.vrsettings"
+	Delete "$vrRuntimePath2\drivers\00vrkeyboardinput\bin\win64\driver_00vrkeyboardinput.dll"
+	Delete "$vrRuntimePath2\drivers\00vrkeyboardinput\bin\win64\driver_vrkeyboardinput.log"
+	Delete "$vrRuntimePath2\drivers\00vrkeyboardinput\bin\win64\error.log"
+	Delete "$vrRuntimePath2\drivers\00vrkeyboardinput\bin\win64\OpenVR-KeyboardInputOverlay.log"
+	Delete "$vrRuntimePath2\drivers\00vrkeyboardinput\resources\icons\ovrki_wand.svg"
+	Delete "$vrRuntimePath2\drivers\00vrkeyboardinput\resources\input\ovrki_controller_profile.json"
+	Delete "$vrRuntimePath2\drivers\00vrkeyboardinput\resources\input\legacy_bindings_ovrki_controller.json"
+	RMdir "$vrRuntimePath2\drivers\00vrkeyboardinput\resources\input"
+	RMdir "$vrRuntimePath2\drivers\00vrkeyboardinput\resources\icons"
+	RMdir "$vrRuntimePath2\drivers\00vrkeyboardinput\resources\settings"
+	RMdir "$vrRuntimePath2\drivers\00vrkeyboardinput\resources\"
+	RMdir "$vrRuntimePath2\drivers\00vrkeyboardinput\bin\win64\"
+	RMdir "$vrRuntimePath2\drivers\00vrkeyboardinput\bin\"
+	RMdir "$vrRuntimePath2\drivers\00vrkeyboardinput\"
 	
 	!include uninstallFiles.list
 
-	DeleteRegKey HKLM "Software\OpenVR-WalkInPlace\Overlay"
-	DeleteRegKey HKLM "Software\OpenVR-WalkInPlace\Driver"
-	DeleteRegKey HKLM "Software\OpenVR-WalkInPlace"
-	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\OpenVRWalkInPlace"
+	DeleteRegKey HKLM "Software\OpenVR-KeyboardInput\Overlay"
+	DeleteRegKey HKLM "Software\OpenVR-KeyboardInput\Driver"
+	DeleteRegKey HKLM "Software\OpenVR-KeyboardInput"
+	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\OpenVRKeyboardInput"
 SectionEnd
 

@@ -16,18 +16,6 @@ Rectangle {
         stackView: mainView
     }
 
-    property GraphPage graphPage:  GraphPage {
-        stackView: mainView
-    }
-
-    property DataModelPage dataModelPage:  DataModelPage {
-        stackView: mainView
-    }
-
-    property DisableDevicePage disableDevicePage:  DisableDevicePage {
-        stackView: mainView
-    }
-
     StackView {
         id: mainView
         anchors.fill: parent
@@ -39,14 +27,6 @@ Rectangle {
         	currentItem.stopTimer()
         }
 
-        function completeTraining() {
-        	mainConfPage.completeTraining()
-        }
-
-        function startAutoConf() {
-        	graphPage.startAutoConf()
-        }
-        
 		pushEnter: Transition {
 			PropertyAnimation {
 				property: "x"

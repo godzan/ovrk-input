@@ -26,7 +26,7 @@ const char* logConfigFileName = "logging.conf";
 const char* logConfigDefault =
 "* GLOBAL:\n"
 "	FORMAT = \"[%level] %datetime{%Y-%M-%d %H:%m:%s}: %msg\"\n"
-"	FILENAME = \"OpenVR-WalkInPlaceOverlay.log\"\n"
+"	FILENAME = \"OpenVR-KeyboardInputOverlay.log\"\n"
 "	ENABLED = true\n"
 "	TO_FILE = true\n"
 "	TO_STANDARD_OUTPUT = true\n"
@@ -63,11 +63,11 @@ void installManifest(bool cleaninstall = false) {
 	auto manifestQPath = QDir::cleanPath(QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("manifest.vrmanifest"));
 	if (QFile::exists(manifestQPath)) {
 		bool alreadyInstalled = false;
-		if (vr::VRApplications()->IsApplicationInstalled(walkinplace::OverlayController::applicationKey)) {
+		if (vr::VRApplications()->IsApplicationInstalled(keyboardinput::OverlayController::applicationKey)) {
 			if (cleaninstall) {
 				char buffer[1024];
 				auto appError = vr::VRApplicationError_None;
-				vr::VRApplications()->GetApplicationPropertyString(walkinplace::OverlayController::applicationKey, vr::VRApplicationProperty_WorkingDirectory_String, buffer, 1024, &appError);
+				vr::VRApplications()->GetApplicationPropertyString(keyboardinput::OverlayController::applicationKey, vr::VRApplicationProperty_WorkingDirectory_String, buffer, 1024, &appError);
 				if (appError == vr::VRApplicationError_None) {
 					auto oldManifestQPath = QDir::cleanPath(QDir(buffer).absoluteFilePath("manifest.vrmanifest"));
 					if (oldManifestQPath.compare(manifestQPath, Qt::CaseInsensitive) != 0) {
@@ -84,7 +84,7 @@ void installManifest(bool cleaninstall = false) {
 		if (apperror != vr::VRApplicationError_None) {
 			throw std::runtime_error(std::string("Could not add application manifest: ") + std::string(vr::VRApplications()->GetApplicationsErrorNameFromEnum(apperror)));
 		} else if (!alreadyInstalled || cleaninstall) {
-			auto apperror = vr::VRApplications()->SetApplicationAutoLaunch(walkinplace::OverlayController::applicationKey, true);
+			auto apperror = vr::VRApplications()->SetApplicationAutoLaunch(keyboardinput::OverlayController::applicationKey, true);
 			if (apperror != vr::VRApplicationError_None) {
 				throw std::runtime_error(std::string("Could not set auto start: ") + std::string(vr::VRApplications()->GetApplicationsErrorNameFromEnum(apperror)));
 			}
@@ -97,7 +97,7 @@ void installManifest(bool cleaninstall = false) {
 void removeManifest() {
 	auto manifestQPath = QDir::cleanPath(QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("manifest.vrmanifest"));
 	if (QFile::exists(manifestQPath)) {
-		if (vr::VRApplications()->IsApplicationInstalled(walkinplace::OverlayController::applicationKey)) {
+		if (vr::VRApplications()->IsApplicationInstalled(keyboardinput::OverlayController::applicationKey)) {
 			vr::VRApplications()->RemoveApplicationManifest(QDir::toNativeSeparators(manifestQPath).toStdString().c_str());
 		}
 	} else {
@@ -200,9 +200,9 @@ int main(int argc, char *argv[]) {
 	try {
 		QApplication a(argc, argv);
 		a.setOrganizationName("pottedmeat7");
-		a.setApplicationName("OpenVRWalkInPlace");
-		a.setApplicationDisplayName(walkinplace::OverlayController::applicationName);
-		a.setApplicationVersion(walkinplace::OverlayController::applicationVersionString);
+		a.setApplicationName("OpenVRKeyboardInput");
+		a.setApplicationDisplayName(keyboardinput::OverlayController::applicationName);
+		a.setApplicationVersion(keyboardinput::OverlayController::applicationVersionString);
 
 		QFont fon("Helvetica", 17);
 		a.setFont(fon);
@@ -245,7 +245,7 @@ int main(int argc, char *argv[]) {
 			conf.parseFromText(logConfigDefault);
 		}
 		if (!conf.get(el::Level::Global, el::ConfigurationType::Filename)) {
-			logFilePath = QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).absoluteFilePath("VRWalkInPlace.log");
+			logFilePath = QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).absoluteFilePath("VRKeyboardInput.log");
 			conf.set(el::Level::Global, el::ConfigurationType::Filename, QDir::toNativeSeparators(logFilePath).toStdString());
 		}
 		conf.setRemainingToDefault();
@@ -267,12 +267,12 @@ int main(int argc, char *argv[]) {
 		}
 
 		QSettings appSettings(QSettings::IniFormat, QSettings::UserScope, a.organizationName(), a.applicationName());
-		walkinplace::OverlayController::setAppSettings(&appSettings);
+		keyboardinput::OverlayController::setAppSettings(&appSettings);
 		LOG(INFO) << "Settings File: " << appSettings.fileName().toStdString();
 
 		QQmlEngine qmlEngine;
 
-		walkinplace::OverlayController* controller = walkinplace::OverlayController::createInstance(desktopMode, noSound);
+		keyboardinput::OverlayController* controller = keyboardinput::OverlayController::createInstance(desktopMode, noSound);
 		controller->Init(&qmlEngine);
 
         QQmlComponent component(&qmlEngine, QUrl::fromLocalFile( QFileInfo("res/qml/mainwidget.qml").absoluteFilePath() ));
@@ -281,7 +281,7 @@ int main(int argc, char *argv[]) {
 			LOG(ERROR) << "QML Error: " << e.toString().toStdString() << std::endl;
 		}
 		auto quickObj = component.create();
-		controller->SetWidget(qobject_cast<QQuickItem*>(quickObj), walkinplace::OverlayController::applicationName, walkinplace::OverlayController::applicationKey);
+		controller->SetWidget(qobject_cast<QQuickItem*>(quickObj), keyboardinput::OverlayController::applicationName, keyboardinput::OverlayController::applicationKey);
 
 		if (!desktopMode && !noManifest) {
 			try {
