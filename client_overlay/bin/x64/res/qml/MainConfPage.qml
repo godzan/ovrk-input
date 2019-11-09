@@ -10,6 +10,7 @@ MyMainViewPage {
     property var initialLoaded: false
 
     function updateInfo() {  
+        kiEnableToggle.checked = KeyboardInputTabController.isKIEnabled();
     }
 
     content: ColumnLayout {
@@ -69,7 +70,7 @@ MyMainViewPage {
                     columns: 1
 
                     MyToggleButton {
-                        id: wipEnableToggle
+                        id: kiEnableToggle
                         text: "Enable Keyboard Input"
                         Layout.maximumWidth: 300
                         Layout.minimumWidth: 300

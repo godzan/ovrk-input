@@ -6,12 +6,10 @@ Delete $INSTDIR\libgcc_s_seh-1.dll
 Delete $INSTDIR\libgfortran-3.dll
 Delete $INSTDIR\libGLESV2.dll
 Delete $INSTDIR\libGLESV2d.dll
-Delete $INSTDIR\libopenblas.dll
 Delete $INSTDIR\libquadmath-0.dll
 Delete $INSTDIR\LICENSE
 Delete $INSTDIR\logging.conf
 Delete $INSTDIR\manifest.vrmanifest
-Delete $INSTDIR\mlpack.dll
 Delete $INSTDIR\opengl32sw.dll
 Delete $INSTDIR\OpenVR-KeyboardInputOverlay.exe
 Delete $INSTDIR\openvr_api.dll

@@ -261,56 +261,63 @@ namespace keyboardinput {
 			currentProfileIdx = index;
 			auto& profile = keyboardInputProfiles[index];
 
-			useTrackers = profile.useTrackers;
-			enableKI(profile.kiEnabled);
-
 			auto settings = OverlayController::appSettings();
 			settings->beginGroup("keyboardInputSettings");
 			auto profileCount = settings->beginReadArray("keyboardInputProfiles");
+			LOG(INFO) << "being parsing input mappings";
 			for (int i = 0; i < profileCount; i++) {
 				settings->setArrayIndex(i);
 				if (index == i) {
-					inputMappings.clear();
-					std::string mappingString = settings->value("inputMappings").toString().toStdString();
-					std::string delimiter = ":";
-					size_t pos = 0;
-					std::string token;
-					while ((pos = mappingString.find(delimiter)) != std::string::npos) {
-						token = mappingString.substr(0, pos);
-						auto kIm = std::make_shared<KeyboardInputMapping>();
-						std::string vals = token;
-						std::string comma = ",";
-						size_t pos2 = 0;
-						std::string tok;
-						int count = 0;
-						while ((pos2 = vals.find(comma)) != std::string::npos) {
-							tok = vals.substr(0, pos2);
-							switch(count) {
-							case 0:
-								kIm->keyboardKey = atoi(tok.c_str());
-								break;
-							case 1:
-								kIm->vrButton = atoi(tok.c_str());
-								break;
-							case 2:
-								kIm->isPress = atoi(tok.c_str()) == 1;
-								break;
-							case 3:
-								if (!kIm->isPress) {
-									kIm->isTouch = atoi(tok.c_str()) == 1;
+					try {
+						inputMappings.clear();
+						std::string mappingString = settings->value("inputMappings").toString().toStdString();
+						std::string delimiter = ":";
+						size_t pos = 0;
+						while ((pos = mappingString.find(delimiter)) != std::string::npos) {
+							std::string token = mappingString.substr(0, pos);
+							auto kIm = std::make_shared<KeyboardInputMapping>();
+							std::string vals = token;
+							std::string comma = ",";
+							size_t pos2 = 0;
+							std::string tok;
+							int count = 0;
+							while (vals.length() > 0) {
+								int tempPos = vals.find(comma);
+								if (tempPos == std::string::npos) {
+									try {
+										kIm->vrButton = atoi(vals.c_str());
+									}
+									catch (std::exception& e) {
+										LOG(INFO) << "Exception caught parsing input mappings: " << e.what();
+									}
 								}
-								break;
-							default:
-								break;
+								else {
+									pos2 = tempPos;
+									tok = vals.substr(0, pos2);
+									try {
+										kIm->keyboardKey = atoi(tok.c_str());
+									}
+									catch (std::exception& e) {
+										LOG(INFO) << "Exception caught parsing input mappings: " << e.what();
+									}
+									vals.erase(0, pos2 + comma.length());
+								}
 							}
-							count++;
-							vals.erase(0, pos2 + comma.length());
+							mappingString.erase(0, pos + delimiter.length());
+							inputMappings.push_back(kIm);
+							LOG(INFO) << "Created input mapping from keyboard: " << kIm->keyboardKey << " to  vr button: " << kIm->vrButton;
 						}
-						mappingString.erase(0, pos + delimiter.length());
-						inputMappings.push_back(kIm);
+					}
+					catch (std::exception& e) {
+						LOG(INFO) << "Error while parsing input mappings: " << e.what();
 					}
 				}
 			}
+			LOG(INFO) << "done parsing input mappings";
+
+			useTrackers = profile.useTrackers;
+			enableKI(profile.kiEnabled);
+
 			settings->endArray();
 			settings->endGroup();
 
@@ -393,10 +400,13 @@ namespace keyboardinput {
 #if defined _WIN64 || defined _LP64
 			for (int i = 0; i < inputMappings.size(); i++) {
 				auto kIm = inputMappings.at(i);
-				if (GetKeyState(kIm->keyboardKey) < 0) {
+				auto keyState = GetKeyState(kIm->keyboardKey);
+				if (keyState < 0 || (keyState == 0 && kIm->wasDown) ) {
 					applyButtonPress(kIm->vrButton);
+					kIm->wasDown = true;
 				}
 				else if (stopCallCount < 20) {
+					kIm->wasDown = false;
 					stopButtonPress(kIm->vrButton);
 				}
 			}
@@ -410,7 +420,41 @@ namespace keyboardinput {
 			try {
 				vrkeyboardinput::VRKeyboardInput vrkeyboardinput;
 				vrkeyboardinput.connect();
-				vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUnpressed, 0, (vr::EVRButtonId)buttonId, 0.0);
+				vr::EVRButtonId buttonCase = (vr::EVRButtonId) buttonId;
+				vr::VRControllerAxis_t axisState;
+				switch (buttonCase) {
+				case vr::k_EButton_DPad_Left:
+					vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUntouched, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
+					vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUnpressed, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
+					axisState.x = 0;
+					axisState.y = 0;
+					vrkeyboardinput.openvrAxisEvent(0, vr::k_EButton_SteamVR_Touchpad, axisState);
+					break;
+				case vr::k_EButton_DPad_Up:
+					vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUntouched, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
+					vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUnpressed, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
+					axisState.x = 0;
+					axisState.y = 0;
+					vrkeyboardinput.openvrAxisEvent(0, vr::k_EButton_SteamVR_Touchpad, axisState);
+					break;
+				case vr::k_EButton_DPad_Right:
+					vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUntouched, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
+					vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUnpressed, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
+					axisState.x = 0;
+					axisState.y = 0;
+					vrkeyboardinput.openvrAxisEvent(0, vr::k_EButton_SteamVR_Touchpad, axisState);
+					break;
+				case vr::k_EButton_DPad_Down:
+					vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUntouched, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
+					vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUnpressed, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
+					axisState.x = 0;
+					axisState.y = 0;
+					vrkeyboardinput.openvrAxisEvent(0, vr::k_EButton_SteamVR_Touchpad, axisState);
+					break;
+				default:
+					vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUnpressed, 0, buttonCase, 0.0);
+					break;
+				}
 			}
 			catch (std::exception& e) {
 				LOG(INFO) << "Exception caught while stopping button press: " << e.what();

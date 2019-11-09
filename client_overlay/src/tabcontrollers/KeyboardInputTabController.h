@@ -26,6 +26,7 @@ namespace keyboardinput {
 		int vrButton = vr::EVRButtonId::k_EButton_DPad_Up;
 		bool isPress = true;
 		bool isTouch = false;
+		bool wasDown = false;
 	};
 
 	struct KeyboardInputProfile {
