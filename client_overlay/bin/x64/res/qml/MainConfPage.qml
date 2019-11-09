@@ -70,13 +70,13 @@ MyMainViewPage {
 
                     MyToggleButton {
                         id: wipEnableToggle
-                        text: "Enable WIP"
-                        Layout.maximumWidth: 200
-                        Layout.minimumWidth: 200
-                        Layout.preferredWidth: 200
+                        text: "Enable Keyboard Input"
+                        Layout.maximumWidth: 300
+                        Layout.minimumWidth: 300
+                        Layout.preferredWidth: 300
                         Layout.fillWidth: true
                         onCheckedChanged: {
-                            KeyboardInputTabController.enableWIP(checked)
+                            KeyboardInputTabController.enableKI(checked)
                         }
                     }
 
@@ -88,7 +88,7 @@ MyMainViewPage {
         ColumnLayout {
             id: profileColumnLYO
             spacing: 18
-            anchors.top: dataModelColumnLYO.bottom
+            anchors.top: mainConfigBox.bottom
             anchors.topMargin: 20
 
             GroupBox {
@@ -233,7 +233,7 @@ MyMainViewPage {
         //load profiles
         var profiles = [""]
         var profileCount = KeyboardInputTabController.getProfileCount()
-        defaultFound = -1
+        var defaultFound = -1
         for (var i = 0; i < profileCount; i++) {
             var p_name = KeyboardInputTabController.getProfileName(i)
             if ( p_name == "default" ) {

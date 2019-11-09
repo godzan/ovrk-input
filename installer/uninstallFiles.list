@@ -745,11 +745,8 @@ Delete $INSTDIR\qtdata\translations\qt_pl.qm
 Delete $INSTDIR\qtdata\translations\qt_ru.qm
 Delete $INSTDIR\qtdata\translations\qt_sk.qm
 Delete $INSTDIR\qtdata\translations\qt_uk.qm
-Delete $INSTDIR\res\OVRWIP.ico
+Delete $INSTDIR\res\OVRKI.ico
 Delete $INSTDIR\res\qml\backarrow.svg
-Delete $INSTDIR\res\qml\DataModelPage.qml
-Delete $INSTDIR\res\qml\DisableDevicePage.qml
-Delete $INSTDIR\res\qml\GraphPage.qml
 Delete $INSTDIR\res\qml\MainConfPage.qml
 Delete $INSTDIR\res\qml\mainwidget.qml
 Delete $INSTDIR\res\qml\MyComboBox.qml

@@ -21,8 +21,17 @@ namespace keyboardinput {
 		bool operator()(T const &a, T const &b) const { return a > b; }
 	};
 
+	struct KeyboardInputMapping {
+		int keyboardKey = 0x57;
+		int vrButton = vr::EVRButtonId::k_EButton_DPad_Up;
+		bool isPress = true;
+		bool isTouch = false;
+	};
+
 	struct KeyboardInputProfile {
 		std::string profileName;
+
+		std::string mappingString;
 
 		bool kiEnabled = false;
 		bool useTrackers = false;
@@ -53,6 +62,7 @@ namespace keyboardinput {
 		std::thread identifyThread;
 
 		std::vector<KeyboardInputProfile> keyboardInputProfiles;
+		std::vector< std::shared_ptr<KeyboardInputMapping>> inputMappings;
 
 		int currentProfileIdx = -1;
 
@@ -64,6 +74,7 @@ namespace keyboardinput {
 		bool initializedProfile = false;
 		bool initializedDriver = false;
 		bool identifyControlTimerSet = true;
+		int initNewProfile = -1;
 
 		bool pressedFlag = false;
 		bool inputStateChanged = false;
@@ -108,24 +119,13 @@ namespace keyboardinput {
 		Q_INVOKABLE unsigned getProfileCount();
 		Q_INVOKABLE QString getProfileName(unsigned index);
 
-		Q_INVOKABLE QList<QString> getDataModelNames();
-
 	public slots:
 		void enableKI(bool enable);
 
 		void setDeviceRenderModel(unsigned deviceIndex, unsigned renderModelIndex, float r, float g, float b, float sx, float sy, float sz);
 
-		bool buttonStatus();
-
-		void stopMovement();
-		void clearClickedFlag();
-		void stopClickMovement();
-		void applyAxisMovement(vr::VRControllerAxis_t axisState);
-		void applyClickMovement();
-		void applyGripMovement();
-		void applyKeyMovement();
-
-		void updateButtonState(uint32_t deviceId, bool firstController);
+		void stopButtonPress(int buttonId);
+		void applyButtonPress(int buttonId);
 
 		void addProfile(QString name);
 		void applyProfile(unsigned index);

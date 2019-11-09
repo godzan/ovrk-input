@@ -10,30 +10,42 @@
   },
   "input_source" :
   {
+    "/input/system" : {
+        "type" : "button",
+        "click" : true,
+        "binding_image_point" : [ 67, 81 ],
+        "order" : 1
+    },
+    "/input/application_menu" : {
+        "type" : "button",
+        "click" : true,
+        "binding_image_point" : [ 64, 35 ],
+        "order" : 2
+    },
     "/input/trackpad" : { 
         "type" : "trackpad",
         "binding_image_point" : [ 100, 100 ],
         "force" : true,
         "click" : true,
         "touch" : true,
-        "order" : 1
+        "order" : 7
     },
     "/input/joystick" : { 
         "type" : "joystick",
         "binding_image_point" : [ 100, 100 ],
         "click" : true,
         "touch" : true,
-        "order" : 2
+        "order" : 8
     },
     "/input/trigger" : {
         "type" : "trigger",
         "binding_image_point" : [ 100, 100 ],
-        "order" : 3
+        "order" : 9
     },
     "/input/grip" : {
         "type" : "button",
         "binding_image_point" : [ 100, 100 ],
-        "order" : 4
+        "order" : 10
     }
   }
 }

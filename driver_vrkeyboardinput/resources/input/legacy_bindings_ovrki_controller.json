@@ -4,6 +4,24 @@
          "sources" : [
             {
                "inputs" : {
+                  "click" : {
+                     "output" : "/actions/legacy/in/right_system_press"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/treadmill/input/system"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/legacy/in/left_applicationmenu_press"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/treadmill/input/application_menu"
+            },
+            {
+               "inputs" : {
                   "pull" : {
                      "output" : "/actions/legacy/in/left_axis1_value"
                   },

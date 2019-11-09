@@ -210,6 +210,10 @@ namespace keyboardinput {
 			settings->setValue("profileName", QString::fromStdString(p.profileName));
 			settings->setValue("kiEnabled", p.kiEnabled);
 			settings->setValue("useTrackers", p.useTrackers);
+			if (initNewProfile >= 0) {
+				settings->setValue("inputMappings", "87,4:65,3:83,6:68,5:"); //WASD to k_EButton_DPad
+				initNewProfile = -1;
+			}			
 			i++;
 		}
 		settings->endArray();
@@ -242,6 +246,7 @@ namespace keyboardinput {
 			auto i = keyboardInputProfiles.size();
 			keyboardInputProfiles.emplace_back();
 			profile = &keyboardInputProfiles[i];
+			initNewProfile = i;
 		}
 		profile->profileName = name.toStdString();
 		profile->kiEnabled = isKIEnabled();
@@ -255,11 +260,9 @@ namespace keyboardinput {
 		if (index < keyboardInputProfiles.size()) {
 			currentProfileIdx = index;
 			auto& profile = keyboardInputProfiles[index];
+
 			useTrackers = profile.useTrackers;
-
 			enableKI(profile.kiEnabled);
-
-			initializedProfile = true;
 
 			auto settings = OverlayController::appSettings();
 			settings->beginGroup("keyboardInputSettings");
@@ -267,11 +270,51 @@ namespace keyboardinput {
 			for (int i = 0; i < profileCount; i++) {
 				settings->setArrayIndex(i);
 				if (index == i) {
+					inputMappings.clear();
+					std::string mappingString = settings->value("inputMappings").toString().toStdString();
+					std::string delimiter = ":";
+					size_t pos = 0;
+					std::string token;
+					while ((pos = mappingString.find(delimiter)) != std::string::npos) {
+						token = mappingString.substr(0, pos);
+						auto kIm = std::make_shared<KeyboardInputMapping>();
+						std::string vals = token;
+						std::string comma = ",";
+						size_t pos2 = 0;
+						std::string tok;
+						int count = 0;
+						while ((pos2 = vals.find(comma)) != std::string::npos) {
+							tok = vals.substr(0, pos2);
+							switch(count) {
+							case 0:
+								kIm->keyboardKey = atoi(tok.c_str());
+								break;
+							case 1:
+								kIm->vrButton = atoi(tok.c_str());
+								break;
+							case 2:
+								kIm->isPress = atoi(tok.c_str()) == 1;
+								break;
+							case 3:
+								if (!kIm->isPress) {
+									kIm->isTouch = atoi(tok.c_str()) == 1;
+								}
+								break;
+							default:
+								break;
+							}
+							count++;
+							vals.erase(0, pos2 + comma.length());
+						}
+						mappingString.erase(0, pos + delimiter.length());
+						inputMappings.push_back(kIm);
+					}
 				}
 			}
 			settings->endArray();
 			settings->endGroup();
 
+			initializedProfile = true;
 		}
 	}
 
@@ -288,7 +331,7 @@ namespace keyboardinput {
 	void KeyboardInputTabController::enableKI(bool enable) {
 		kiEnabled = enable;
 		if (!enable && initializedDriver) {
-			stopMovement();
+			//stopMovement();
 		}
 	}
 
@@ -347,207 +390,78 @@ namespace keyboardinput {
 
 	void KeyboardInputTabController::keyboardInput() {
 		if (kiEnabled && initializedDriver) {
-			auto now = std::chrono::duration_cast <std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-			double tdiff = ((double)(now - timeLastTick));
-			//LOG(INFO) << "DT: " << tdiff;
-			if (tdiff >= dT) {
-				timeLastTick = now;
-			}
-		}
-	}
-
-	void KeyboardInputTabController::clearClickedFlag() {
-		try {
-			if (gameType->useAxis) {
-				vr::VRControllerAxis_t axisState;
-				axisState.x = 0;
-				axisState.y = 0;
-				try {
-					vrkeyboardinput::VRKeyboardInput vrkeyboardinput;
-					vrkeyboardinput.connect();
-					if (gameType->inputType == InputType::touchpad) {
-						vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUnpressed, deviceId, vr::k_EButton_SteamVR_Touchpad, 0.0);
-						pressedFlag = false;
-						vrkeyboardinput.openvrAxisEvent(deviceId, vr::k_EButton_SteamVR_Touchpad, axisState);
-						vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUntouched, deviceId, vr::k_EButton_SteamVR_Touchpad, 0.0);
-					} else {
-						vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUnpressed, deviceId, vr::k_EButton_IndexController_JoyStick, 0.0);
-						pressedFlag = false;
-						vrkeyboardinput.openvrAxisEvent(deviceId, vr::k_EButton_IndexController_JoyStick, axisState);
-						vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUntouched, deviceId, vr::k_EButton_IndexController_JoyStick, 0.0);
-					}
-				}
-				catch (std::exception& e) {
-					//LOG(INFO) << "Exception caught while stopping virtual step movement: " << e.what();
-				}
-			}
-		}
-		catch (std::exception& e) {
-			//LOG(INFO) << "Exception caught while applying virtual axis movement: " << e.what();
-		}
-	}
-
-	void KeyboardInputTabController::stopMovement() {
-		try {
-			if (stopCallCount < 20) {
-				stopCallCount++;
-				if (gameType->useAxis) {
-					vr::VRControllerAxis_t axisState;
-					axisState.x = 0;
-					axisState.y = 0;
-					try {
-						vrkeyboardinput::VRKeyboardInput vrkeyboardinput;
-						vrkeyboardinput.connect();
-						if (gameType->inputType == InputType::touchpad) {
-							if (gameType->useClick) {
-								vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUnpressed, deviceId, vr::k_EButton_SteamVR_Touchpad, 0.0);
-								pressedFlag = false;
-							}
-							vrkeyboardinput.openvrAxisEvent(deviceId, vr::k_EButton_SteamVR_Touchpad, axisState);
-							vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUntouched, deviceId, vr::k_EButton_SteamVR_Touchpad, 0.0);
-						}
-						else {
-							if (gameType->useClick) {
-								vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUnpressed, deviceId, vr::k_EButton_IndexController_JoyStick, 0.0);
-								pressedFlag = false;
-							}
-							vrkeyboardinput.openvrAxisEvent(deviceId, vr::k_EButton_IndexController_JoyStick, axisState);
-							vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUntouched, deviceId, vr::k_EButton_IndexController_JoyStick, 0.0);
-
-						}
-					}
-					catch (std::exception& e) {
-						//LOG(INFO) << "Exception caught while stopping virtual step movement: " << e.what();
-					}
-				}
-				else if (gameType->inputType == InputType::grip) {
-					try {
-						vrkeyboardinput::VRKeyboardInput vrkeyboardinput;
-						vrkeyboardinput.connect();
-						vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUnpressed, deviceId, vr::k_EButton_Grip, 0.0);
-					}
-					catch (std::exception& e) {
-						//LOG(INFO) << "Exception caught while applying virtual grip movement: " << e.what();
-					}
-				}
-				/*else if (gameType == 9999) { //click only disabled atm
-					try {
-						vrkeyboardinput::VRKeyboardInput vrkeyboardinput;
-						vrkeyboardinput.connect();
-						vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUnpressed, deviceId, vr::k_EButton_SteamVR_Touchpad, 0.0);
-					}
-					catch (std::exception& e) {
-						//LOG(INFO) << "Exception caught while stopping virtual teleport movement: " << e.what();
-					}
-				}*/
-				else if (gameType->inputType == InputType::keyWASD) {
 #if defined _WIN64 || defined _LP64
-					INPUT input[2];
-					input[0].type = INPUT_KEYBOARD;
-					input[0].ki.wVk = 0;
-					input[0].ki.wScan = MapVirtualKey(0x57, 0);
-					input[0].ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
-					input[0].ki.time = 0;
-					input[0].ki.dwExtraInfo = 0;
-					SendInput(2, input, sizeof(INPUT));
-#else
-#endif
+			for (int i = 0; i < inputMappings.size(); i++) {
+				auto kIm = inputMappings.at(i);
+				if (GetKeyState(kIm->keyboardKey) < 0) {
+					applyButtonPress(kIm->vrButton);
 				}
-				else if (gameType->inputType == InputType::keyArrow) {
-#if defined _WIN64 || defined _LP64
-					INPUT input[2];
-					input[0].type = INPUT_KEYBOARD;
-					input[0].ki.wVk = 0;
-					input[0].ki.wScan = MapVirtualKey(0x26, 0);
-					input[0].ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
-					input[0].ki.time = 0;
-					input[0].ki.dwExtraInfo = 0;
-					SendInput(2, input, sizeof(INPUT));
-#else
-#endif
+				else if (stopCallCount < 20) {
+					stopButtonPress(kIm->vrButton);
 				}
 			}
-		}
-		catch (std::exception &e) {
-			LOG(INFO) << "error when attempting to stop movement: " << e.what();
+#endif
 		}
 	}
 
-	void KeyboardInputTabController::stopClickMovement() {
-		if (gameType == 0) {
+	void KeyboardInputTabController::stopButtonPress(int buttonId) {
+		if (stopCallCount < 20) {
+			stopCallCount++;
 			try {
 				vrkeyboardinput::VRKeyboardInput vrkeyboardinput;
 				vrkeyboardinput.connect();
-				vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUnpressed, deviceId, vr::k_EButton_SteamVR_Touchpad, 0.0);
-				pressedFlag = true;
+				vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUnpressed, 0, (vr::EVRButtonId)buttonId, 0.0);
 			}
 			catch (std::exception& e) {
-				//LOG(INFO) << "Exception caught while stopping virtual step movement: " << e.what();
+				LOG(INFO) << "Exception caught while stopping button press: " << e.what();
 			}
 		}
 	}
 
-	void KeyboardInputTabController::applyAxisMovement(vr::VRControllerAxis_t axisState) {
+	void KeyboardInputTabController::applyButtonPress(int buttonId) {
 		try {
 			vrkeyboardinput::VRKeyboardInput vrkeyboardinput;
 			vrkeyboardinput.connect();
-			if (gameType->inputType == InputType::touchpad) {
-				vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonTouched, deviceId, vr::k_EButton_SteamVR_Touchpad, 0.0);
-				vrkeyboardinput.openvrAxisEvent(deviceId, vr::k_EButton_SteamVR_Touchpad, axisState);
+			vr::EVRButtonId buttonCase = (vr::EVRButtonId) buttonId;				
+			vr::VRControllerAxis_t axisState;
+			switch(buttonCase){
+			case vr::k_EButton_DPad_Left:
+				vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonTouched, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
+				vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonPressed, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
+				axisState.x = -1;
+				axisState.y = 0;
+				vrkeyboardinput.openvrAxisEvent(0, vr::k_EButton_SteamVR_Touchpad, axisState);
+				break;
+			case vr::k_EButton_DPad_Up:
+				vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonTouched, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
+				vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonPressed, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
+				axisState.x = 0;
+				axisState.y = 1;
+				vrkeyboardinput.openvrAxisEvent(0, vr::k_EButton_SteamVR_Touchpad, axisState);
+				break;
+			case vr::k_EButton_DPad_Right:
+				vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonTouched, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
+				vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonPressed, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
+				axisState.x = 1;
+				axisState.y = 0;
+				vrkeyboardinput.openvrAxisEvent(0, vr::k_EButton_SteamVR_Touchpad, axisState);
+				break;
+			case vr::k_EButton_DPad_Down:
+				vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonTouched, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
+				vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonPressed, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
+				axisState.x = 0;
+				axisState.y = -1;
+				vrkeyboardinput.openvrAxisEvent(0, vr::k_EButton_SteamVR_Touchpad, axisState);
+				break;
+			default:
+				vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonPressed, 0, buttonCase, 0.0);
+				break;
 			}
-			else {
-				vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonTouched, deviceId, vr::k_EButton_IndexController_JoyStick, 0.0);
-				vrkeyboardinput.openvrAxisEvent(deviceId, vr::k_EButton_IndexController_JoyStick, axisState);
-			}
-			if (gameType->useClick) {
-				if (pressedFlag || gameType->alwaysHeld) {
-					if (gameType->inputType == InputType::touchpad) {
-						vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonPressed, deviceId, vr::k_EButton_SteamVR_Touchpad, 0.0);
-					}
-					else {
-						vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonPressed, deviceId, vr::k_EButton_IndexController_JoyStick, 0.0);
-					}
-				}
-				else {
-					if (gameType->inputType == InputType::touchpad) {
-						vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUnpressed, deviceId, vr::k_EButton_SteamVR_Touchpad, 0.0);
-					}
-					else {
-						vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUnpressed, deviceId, vr::k_EButton_IndexController_JoyStick, 0.0);
-					}
-				}
-
-			}
+			stopCallCount = 0;
 		}
 		catch (std::exception& e) {
-			//LOG(INFO) << "Exception caught while applying virtual axis movement: " << e.what();
+			LOG(INFO) << "Exception caught while applying virtual button movement: " << e.what();
 		}
-	}
-
-	void KeyboardInputTabController::applyClickMovement() {
-		if (pressedFlag) {
-			try {
-				vrkeyboardinput::VRKeyboardInput vrkeyboardinput;
-				vrkeyboardinput.connect();
-				vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonPressed, deviceId, vr::k_EButton_SteamVR_Touchpad, 0.0);
-				pressedFlag = false;
-			}
-			catch (std::exception& e) {
-				//LOG(INFO) << "Exception caught while applying virtual telport movement: " << e.what();
-			}
-		}
-		else {
-			try {
-				vrkeyboardinput::VRKeyboardInput vrkeyboardinput;
-				vrkeyboardinput.connect();
-				vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUnpressed, deviceId, vr::k_EButton_SteamVR_Touchpad, 0.0);
-				pressedFlag = true;
-			}
-			catch (std::exception& e) {
-				//LOG(INFO) << "Exception caught while resetting virtual telport movement: " << e.what();
-			}
-		}
-		unnTouchedCount = 0;
 	}
 
 
