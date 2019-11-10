@@ -27,6 +27,7 @@ namespace keyboardinput {
 		bool isPress = true;
 		bool isTouch = false;
 		bool wasDown = false;
+		double timeLastDown = 0;
 	};
 
 	struct KeyboardInputProfile {
@@ -94,6 +95,7 @@ namespace keyboardinput {
 		double timeStep = 1.0 / 40.0;
 		double dT = timeStep * 1000;
 		double timeLastTick = 0.0;
+		double kiReleaseTO = 3300;
 
 		double identifyControlLastTime = 99999;
 		double identifyControlTimeOut = 6000;

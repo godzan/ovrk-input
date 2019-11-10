@@ -59,7 +59,7 @@ namespace vrkeyboardinput {
 
         vr::VRProperties()->SetUint64Property(m_propertyContainerHandle, vr::Prop_SupportedButtons_Uint64, available_buttons);
 
-        //vr::VRProperties()->SetStringProperty(m_propertyContainerHandle, vr::Prop_LegacyInputProfile_String, "legacy_bindings_ovrwip_controller");
+        //vr::VRProperties()->SetStringProperty(m_propertyContainerHandle, vr::Prop_LegacyInputProfile_String, "legacy_bindings_ovrki_controller");
 
         // Configure JSON controller configuration input profile
         vr::VRProperties()->SetStringProperty(m_propertyContainerHandle, vr::Prop_InputProfilePath_String, "{00vrkeyboardinput}/input/ovrki_controller_profile.json");

@@ -264,7 +264,7 @@ namespace keyboardinput {
 			auto settings = OverlayController::appSettings();
 			settings->beginGroup("keyboardInputSettings");
 			auto profileCount = settings->beginReadArray("keyboardInputProfiles");
-			LOG(INFO) << "being parsing input mappings";
+			LOG(INFO) << "begin parsing input mappings";
 			for (int i = 0; i < profileCount; i++) {
 				settings->setArrayIndex(i);
 				if (index == i) {
@@ -280,10 +280,11 @@ namespace keyboardinput {
 							std::string comma = ",";
 							size_t pos2 = 0;
 							std::string tok;
-							int count = 0;
-							while (vals.length() > 0) {
+							bool foundLast = false;
+							while (vals.length() > 0 && !foundLast) {
 								int tempPos = vals.find(comma);
 								if (tempPos == std::string::npos) {
+									foundLast = true;
 									try {
 										kIm->vrButton = atoi(vals.c_str());
 									}
@@ -397,18 +398,25 @@ namespace keyboardinput {
 
 	void KeyboardInputTabController::keyboardInput() {
 		if (kiEnabled && initializedDriver) {
-#if defined _WIN64 || defined _LP64
+#if defined _WIN64 || defined _LP64			
+			auto now = std::chrono::duration_cast <std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 			for (int i = 0; i < inputMappings.size(); i++) {
 				auto kIm = inputMappings.at(i);
-				auto keyState = GetKeyState(kIm->keyboardKey);
-				if (keyState < 0 || (keyState == 0 && kIm->wasDown) ) {
-					applyButtonPress(kIm->vrButton);
+				/*if (GetKeyState(kIm->keyboardKey) < 0 ) {
 					kIm->wasDown = true;
+					kIm->timeLastDown = now;
+				}
+				if (kIm->wasDown && (now - kIm->timeLastDown) >= kiReleaseTO) {
+					if (GetKeyState(kIm->keyboardKey) > 0) {
+						kIm->wasDown = false;
+					}
+				}*/
+				if (GetKeyState(kIm->keyboardKey) < 0) {
+					applyButtonPress(kIm->vrButton);
 				}
 				else if (stopCallCount < 20) {
-					kIm->wasDown = false;
 					stopButtonPress(kIm->vrButton);
-				}
+				}	
 			}
 #endif
 		}

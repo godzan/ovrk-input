@@ -1,51 +1,51 @@
 {
   "jsonid" : "input_profile",
-  "controller_type": "ovrwip_controller",
-  "legacy_profile": "ovrwip_controller",
-  "legacy_binding" :  "{00vrkeyboardinput}/input/legacy_bindings_ovrki_controller.json",
+  "controller_type": "ovrki_controller",
+  "legacy_profile": "ovrki_controller",
+  "legacy_binding" :  "{00vrkeyboardinput}/input/legacy_bindings_ovrwip_controller.json",
   "input_bindingui_mode" : "single_device",
   "input_bindingui_right" :
   {
-    "image": "{00vrkeyboardinput}/icons/ovrwip_wand.svg"
+    "image": "{00vrkeyboardinput}/icons/ovrki_wand.svg"
   },
   "input_source" :
   {
     "/input/system" : {
         "type" : "button",
         "click" : true,
-        "binding_image_point" : [ 67, 81 ],
+        "binding_image_point" : [ 50,50 ],
         "order" : 1
     },
     "/input/application_menu" : {
         "type" : "button",
         "click" : true,
-        "binding_image_point" : [ 64, 35 ],
+        "binding_image_point" : [ 50,50 ],
         "order" : 2
     },
     "/input/trackpad" : { 
         "type" : "trackpad",
-        "binding_image_point" : [ 100, 100 ],
+        "binding_image_point" : [ 50,50 ],
         "force" : true,
         "click" : true,
         "touch" : true,
-        "order" : 7
+        "order" : 3
     },
     "/input/joystick" : { 
         "type" : "joystick",
-        "binding_image_point" : [ 100, 100 ],
+        "binding_image_point" : [ 50,50 ],
         "click" : true,
         "touch" : true,
-        "order" : 8
+        "order" : 4
     },
     "/input/trigger" : {
         "type" : "trigger",
-        "binding_image_point" : [ 100, 100 ],
-        "order" : 9
+        "binding_image_point" : [ 50,50 ],
+        "order" : 5
     },
     "/input/grip" : {
         "type" : "button",
-        "binding_image_point" : [ 100, 100 ],
-        "order" : 10
+        "binding_image_point" : [ 50,50 ],
+        "order" : 6
     }
   }
 }
