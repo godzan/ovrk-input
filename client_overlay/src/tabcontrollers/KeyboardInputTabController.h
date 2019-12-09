@@ -35,6 +35,7 @@ namespace keyboardinput {
 
 		std::string mappingString;
 
+		int keyReleaseTO = 5;
 		bool kiEnabled = false;
 		bool useTrackers = false;
 	};
@@ -81,6 +82,7 @@ namespace keyboardinput {
 		bool pressedFlag = false;
 		bool inputStateChanged = false;
 
+		int keyReleaseTO = 5;
 		int controlSelectOverlayHandle = -1;
 		int vive_controller_model_index = -1;
 		int unnTouchedCount = 0;
@@ -95,7 +97,7 @@ namespace keyboardinput {
 		double timeStep = 1.0 / 40.0;
 		double dT = timeStep * 1000;
 		double timeLastTick = 0.0;
-		double kiReleaseTO = 3300;
+		double kiReleaseTO = 700;
 
 		double identifyControlLastTime = 99999;
 		double identifyControlTimeOut = 6000;

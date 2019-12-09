@@ -187,6 +187,7 @@ namespace keyboardinput {
 			entry.profileName = settings->value("profileName").toString().toStdString();
 			entry.kiEnabled = settings->value("kiEnabled", false).toBool();
 			entry.useTrackers = settings->value("useTrackers", false).toBool();
+			entry.keyReleaseTO = settings->value("keyReleaseTO", 5).toInt();
 		}
 		settings->endArray();
 		settings->endGroup();
@@ -210,6 +211,7 @@ namespace keyboardinput {
 			settings->setValue("profileName", QString::fromStdString(p.profileName));
 			settings->setValue("kiEnabled", p.kiEnabled);
 			settings->setValue("useTrackers", p.useTrackers);
+			settings->setValue("keyReleaseTO", p.keyReleaseTO);
 			if (initNewProfile >= 0) {
 				settings->setValue("inputMappings", "87,4:65,3:83,6:68,5:"); //WASD to k_EButton_DPad
 				initNewProfile = -1;
@@ -251,6 +253,7 @@ namespace keyboardinput {
 		profile->profileName = name.toStdString();
 		profile->kiEnabled = isKIEnabled();
 		profile->useTrackers = useTrackers;
+		profile->keyReleaseTO = keyReleaseTO;
 
 		saveProfiles();
 		OverlayController::appSettings()->sync();
@@ -317,7 +320,9 @@ namespace keyboardinput {
 			LOG(INFO) << "done parsing input mappings";
 
 			useTrackers = profile.useTrackers;
-			enableKI(profile.kiEnabled);
+			if (profile.kiEnabled) {
+				enableKI(profile.kiEnabled);
+			}
 
 			settings->endArray();
 			settings->endGroup();
@@ -402,20 +407,24 @@ namespace keyboardinput {
 			auto now = std::chrono::duration_cast <std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 			for (int i = 0; i < inputMappings.size(); i++) {
 				auto kIm = inputMappings.at(i);
-				/*if (GetKeyState(kIm->keyboardKey) < 0 ) {
-					kIm->wasDown = true;
-					kIm->timeLastDown = now;
+				short state = GetAsyncKeyState(kIm->keyboardKey);
+				int lowBit = state & 1;
+				int highBit = ((unsigned short)state) >> 15;
+				//LOG(INFO) << "keyboard state: held? " << (state & 0x8000) << " highbit: " << highBit << " lowbit: " << lowBit << " state: " << (state);
+				if (highBit > 0) {
+					//if (true || !kIm->wasDown) {
+					applyButtonPress(kIm->vrButton);
+					//kIm->wasDown = true;
+					//}
+					//kIm->timeLastDown = now;
+					stopCallCount = 0;
 				}
-				if (kIm->wasDown && (now - kIm->timeLastDown) >= kiReleaseTO) {
-					if (GetKeyState(kIm->keyboardKey) > 0) {
+				else if ( ( stopCallCount < (keyReleaseTO+10)) ) { //&& (stopCallCount > 0 || (now - kIm->timeLastDown) > kiReleaseTO)) {
+					if (stopCallCount > keyReleaseTO) {
+						stopButtonPress(kIm->vrButton);
 						kIm->wasDown = false;
 					}
-				}*/
-				if (GetKeyState(kIm->keyboardKey) < 0) {
-					applyButtonPress(kIm->vrButton);
-				}
-				else if (stopCallCount < 20) {
-					stopButtonPress(kIm->vrButton);
+					stopCallCount++;
 				}	
 			}
 #endif
@@ -423,8 +432,6 @@ namespace keyboardinput {
 	}
 
 	void KeyboardInputTabController::stopButtonPress(int buttonId) {
-		if (stopCallCount < 20) {
-			stopCallCount++;
 			try {
 				vrkeyboardinput::VRKeyboardInput vrkeyboardinput;
 				vrkeyboardinput.connect();
@@ -432,32 +439,32 @@ namespace keyboardinput {
 				vr::VRControllerAxis_t axisState;
 				switch (buttonCase) {
 				case vr::k_EButton_DPad_Left:
-					vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUntouched, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
-					vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUnpressed, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
 					axisState.x = 0;
 					axisState.y = 0;
 					vrkeyboardinput.openvrAxisEvent(0, vr::k_EButton_SteamVR_Touchpad, axisState);
+					vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUnpressed, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
+					vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUntouched, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
 					break;
 				case vr::k_EButton_DPad_Up:
-					vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUntouched, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
-					vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUnpressed, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
 					axisState.x = 0;
 					axisState.y = 0;
 					vrkeyboardinput.openvrAxisEvent(0, vr::k_EButton_SteamVR_Touchpad, axisState);
+					vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUnpressed, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
+					vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUntouched, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
 					break;
 				case vr::k_EButton_DPad_Right:
-					vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUntouched, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
-					vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUnpressed, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
 					axisState.x = 0;
 					axisState.y = 0;
 					vrkeyboardinput.openvrAxisEvent(0, vr::k_EButton_SteamVR_Touchpad, axisState);
+					vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUnpressed, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
+					vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUntouched, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
 					break;
 				case vr::k_EButton_DPad_Down:
-					vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUntouched, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
-					vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUnpressed, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
 					axisState.x = 0;
 					axisState.y = 0;
 					vrkeyboardinput.openvrAxisEvent(0, vr::k_EButton_SteamVR_Touchpad, axisState);
+					vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUnpressed, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
+					vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUntouched, 0, vr::k_EButton_SteamVR_Touchpad, 0.0);
 					break;
 				default:
 					vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonUnpressed, 0, buttonCase, 0.0);
@@ -467,7 +474,7 @@ namespace keyboardinput {
 			catch (std::exception& e) {
 				LOG(INFO) << "Exception caught while stopping button press: " << e.what();
 			}
-		}
+		
 	}
 
 	void KeyboardInputTabController::applyButtonPress(int buttonId) {
@@ -509,7 +516,6 @@ namespace keyboardinput {
 				vrkeyboardinput.openvrButtonEvent(vrkeyboardinput::ButtonEventType::ButtonPressed, 0, buttonCase, 0.0);
 				break;
 			}
-			stopCallCount = 0;
 		}
 		catch (std::exception& e) {
 			LOG(INFO) << "Exception caught while applying virtual button movement: " << e.what();

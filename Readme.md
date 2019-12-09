@@ -34,6 +34,9 @@ k_EButton_DPad_Right		= 5,
 k_EButton_DPad_Down			= 6,
 k_EButton_A					= 7,
 ```
+There is a timeout of frames to ensure the keyboard state is accurate this variable by default waits 5 calls to keyboard state
+This works for my processor, which has one state that key is held down followed by three states that say the key is released (even though it actually is still held down). The fourth call says the key is held down again, so this timeout is necessary. Im not too sure this timeout has anything to due with processor speed or queueing of system messages (keyboard state etc.). The variable of 5 may need to be changed for other systems. The variable can be changed from the profiles with a line in the profile as `keyboardInputProfiles\<profile_index>\keyReleaseTO=5` 
+Note if this variable needs to much larger, there will be a delay in stopping the VR input.
 
 ## Any Issues Check out the Logs
 Overlay UI Log here `C:\Users\<USERNAME>\AppData\Roaming\pottedmeat7\OpenVRKeyboardInput\VRKeyboardInput.log`
